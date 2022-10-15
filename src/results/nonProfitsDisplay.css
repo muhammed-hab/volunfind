@@ -1,0 +1,60 @@
+
+div.result-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.nonprofits-loading {
+    background-color: white;
+    padding: 20px 25px;
+    border-radius: 10px;
+}
+
+.nonprofits-results {
+    background-color: white;
+    border-radius: 10px;
+    padding: 7px;
+    margin-top: 5px;
+    overflow: hidden;
+
+    display: grid;
+    grid-template-rows: min-content auto;
+}
+.results-list {
+    display: grid;
+    grid-gap: 30px;
+    overflow: auto;
+}
+
+.results-header {
+    display: grid;
+    grid-template-columns: auto min-content;
+    margin-bottom: 10px;
+}
+.results-title {
+    font-size: 24px;
+    line-height: 24px;
+    margin: 0;
+}
+.btn {
+    width: 175px;
+    display: block;
+    font-size: 22px;
+    color: white;
+    text-decoration: none;
+    font-weight: 480;
+    border-radius: 8px;
+    text-align: center;
+}
+.btn:hover {
+    text-decoration: underline;
+}
+.btn-blue {
+    background-color: #88BBD6;
+}
+.btn-green {
+    background-color: #5FC8A8;
+}
+.btn-dark-green {
+    background-color: #65AB96;
+}
