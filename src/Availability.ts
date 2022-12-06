@@ -6,7 +6,7 @@ export interface DayAvailability {from: number, to: number, checked: boolean}
 export type Availability = {[key in DateType]: DayAvailability};
 
 export namespace Availability {
-	export const DefaultAvailability: Availability = {
+	export const DefaultAvailability: {(): Availability} = () => ({
 		friday: {checked: false, from: 10, to: 14},
 		monday: {checked: false, from: 10, to: 14},
 		saturday: {checked: false, from: 10, to: 14},
@@ -14,7 +14,7 @@ export namespace Availability {
 		thursday: {checked: false, from: 10, to: 14},
 		tuesday: {checked: false, from: 10, to: 14},
 		wednesday: {checked: false, from: 10, to: 14}
-	};
+	});
 	
 	export function serialize(availability: Availability): string {
 		return JSON.stringify(
@@ -26,7 +26,7 @@ export namespace Availability {
 	
 	export function deserialize(availSerialized: string): Availability {
 		return {
-			...DefaultAvailability,
+			...DefaultAvailability(),
 			...Object.fromEntries(JSON.parse(availSerialized)
 			                          .map((day: [string, number, number]) => [day[0],
 				                          {checked: true, from: day[1], to: day[2]}]
