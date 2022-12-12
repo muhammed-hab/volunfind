@@ -1,4 +1,5 @@
-import {Availability} from "../Availability";
+import {Availability, DateType} from "../Availability";
+import {DBInterface} from "../DBInterface";
 
 export interface NonProfit {
 	logoURL: string,
@@ -11,42 +12,56 @@ export interface NonProfit {
 }
 
 export namespace NonProfit {
-	export async function getNonProfits(availability: Availability, categories: string[]): Promise<NonProfit[]> {
-		return [
-			{
-				logoURL: 'https://nordc.org/getattachment/About/Media-and-Marketing/NORD-Commission-text-Logo_v1KR.png/',
-				availability: {
-					saturday: {checked: true, from: 10, to: 14},
-					sunday: {checked: true, from: 10, to: 14},
-					monday: {checked: false, from: 0, to: 0},
-					tuesday: {checked: false, from: 0, to: 0},
-					wednesday: {checked: false, from: 0, to: 0},
-					thursday: {checked: false, from: 0, to: 0},
-					friday: {checked: false, from: 0, to: 0}
-				},
-				category: 'Recreational Center',
-				description: "The New Orleans Recreation Development Commission offers recreation activities, classes, programs and special events for all ages at recreation centers, pools and playgrounds across New Orleans.",
-				url: 'https://nordc.org/home/',
-				name: 'NORDC',
-				imageURL: 'https://nordc.org/getattachment/Activities/Outdoors/Canoeing-2.jpg/?lang=en-US&width=400&height=300'
-			},
-			{
-				logoURL: 'https://1000logos.net/wp-content/uploads/2020/09/ASPCA-logo.png',
-				description: 'Learn more about the ASPCA\'s work to rescue animals from abuse, pass humane laws and share resources with shelters nationwide. Join our fight today!',
-				category: 'Animal Shelter',
-				url: 'https://www.aspca.org/',
-				name: 'ASPCA',
-				availability: {
-					saturday: {checked: true, from: 10, to: 14},
-					sunday: {checked: true, from: 10, to: 14},
-					monday: {checked: false, from: 0, to: 0},
-					tuesday: {checked: true, from: 18, to: 21},
-					wednesday: {checked: true, from: 18, to: 21},
-					thursday: {checked: true, from: 17.5, to: 20.5},
-					friday: {checked: false, from: 0, to: 0}
-				},
-				imageURL: 'https://www.dogtime.com/assets/uploads/2017/08/aspca-nyc-dogs-2-1280x720.jpg'
+	export async function getNonProfits(availability: Availability,
+	                                    categories: string[]): Promise<NonProfit[]> {
+		const db = await DBInterface.getDB();
+		
+		const availabilitySQLParams = Object.entries(availability).filter(([_, {checked}]) => checked)
+			.map(([day, {from, to}]) => [day, from, to]).flat();
+		
+		const matches = DBInterface.convertRowsToObjects(db.exec(`
+			SELECT * FROM nonprofits WHERE id in (
+			  SELECT DISTINCT(times.nonprofitid) FROM
+			    (SELECT * FROM times WHERE times.nonprofitid IN
+			      (SELECT id FROM nonprofits WHERE nonprofits.category IN
+			        (VALUES ${Array(categories.length).fill('(?)').join(',')}))
+			  ) times JOIN
+			    (WITH avail(day, start, end) AS
+			    	(VALUES ${Array(availabilitySQLParams.length).fill('(?, ?, ?)').join(',')})
+		        SELECT * from avail) avail
+			      ON times.day=avail.day AND (avail.start <= times.end AND avail.end >= times.start)
+			  ORDER BY
+			  	MIN(avail.end, times.end) - MAX(avail.start, times.start) DESC,
+			    times.start - avail.start DESC
+			);
+  		`, [categories, availabilitySQLParams].flat())[0]);
+		
+		const nonprofits = new Map<number, NonProfit>(
+			matches.map(row => [row.id, {
+				logoURL: row.logo_url,
+				availability: Availability.DefaultAvailability(),
+				category: row.category,
+				description: row.description,
+				url: row.home_url,
+				name: row.name,
+				imageURL: row.image_url
+			}])
+		);
+		
+		const times = DBInterface.convertRowsToObjects(
+			db.exec(`SELECT * FROM times WHERE nonprofitid in
+							(VALUES ${Array(matches.length).fill('(?)').join(',')});`,
+					matches.map(row => row.id)
+			)[0]
+		);
+		
+		times.forEach(row => {
+			console.log(nonprofits.get(row.nonprofitid));
+            nonprofits.get(row.nonprofitid)!.availability[row.day as DateType] =
+	            {checked: true, from: row.start, to: row.end}
 			}
-		]
+		);
+		console.log(nonprofits);
+		return [...nonprofits.entries()].map(([, nonprofit]) => nonprofit);
 	}
 }

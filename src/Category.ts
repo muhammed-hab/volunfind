@@ -1,12 +1,15 @@
+import {DBInterface} from "./DBInterface";
+
 export interface Category {
 	category: string, checked: boolean
 }
 export namespace Category {
 	export async function getAllCategories(): Promise<string[]> {
-		return ['Animal Shelters', 'Food Banks',
-		        'Hospitals', 'Recreational Centers',
-		        'Sports Teams', 'Senior Centers',
-		        'Item 2', 'Item 3'];
+		const db = await DBInterface.getDB();
+		const categories = DBInterface.convertRowsToObjects(
+			db.exec(`SELECT category FROM categories;`)[0]
+		);
+		return categories.map(({category}) => category);
 	}
 	
 	export function serialize(category: Category[]): string {
