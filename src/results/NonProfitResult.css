@@ -19,6 +19,9 @@
     color: #595959;
     text-align: center;
     font-weight: 350;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .title-cat-volunteer {
