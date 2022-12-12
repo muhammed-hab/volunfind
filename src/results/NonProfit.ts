@@ -56,12 +56,10 @@ export namespace NonProfit {
 		);
 		
 		times.forEach(row => {
-			console.log(nonprofits.get(row.nonprofitid));
             nonprofits.get(row.nonprofitid)!.availability[row.day as DateType] =
 	            {checked: true, from: row.start, to: row.end}
 			}
 		);
-		console.log(nonprofits);
 		return [...nonprofits.entries()].map(([, nonprofit]) => nonprofit);
 	}
 }
