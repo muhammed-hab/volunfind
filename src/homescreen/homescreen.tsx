@@ -51,7 +51,7 @@ export function WebFilters(props: FiltersProps) {
 
 export function Homescreen(props: {categories?: string[], availability?: Availability}) {
 	
-	const [usage, setUsage] = useState({ people: 123, hours: 13034 });
+	const [usage, setUsage] = useState({ people: 74, hours: 434 });
 	const [categories, setCategories] = useState([{category: 'Loading...', checked: false}]);
 	
 	useEffect(() => {

@@ -30,6 +30,7 @@
     align-items: end;
     grid-gap: 10px;
     position: relative;
+    height: 27px;
 }
 .title-cat-volunteer > h3 {
     font-size: 30px;
@@ -63,6 +64,7 @@
 .description {
     margin: 0;
     font-weight: 500;
+    color: #333;
 }
 
 
@@ -71,7 +73,8 @@
 .details-and-img {
     display: grid;
     place-items: center;
-    max-width: 250px;
+    max-width: 300px;
+    text-align: center;
 }
 .details-and-img > * {
     margin: 0;
@@ -112,6 +115,8 @@
     width: 80vw;
     display: grid;
     place-items: center;
+    overflow: scroll;
+    max-height: 80vh;
 }
 .mobile-popup > img {
     max-width: 250px;
@@ -143,7 +148,7 @@
         grid-area: desc;
     }
 }
-@media (max-width: 1109.99px) and (min-width: 650px) {
+@media (max-width: 1109.99px) and (min-width: 697px) {
     .result-wide {
         display: grid;
 
@@ -156,14 +161,17 @@
         margin-top: 6px;
     }
 }
-@media (min-width: 650px) and (max-width: 900px) {
+@media (min-width: 697px) and (max-width: 900px) {
     .timetable {
         width: 430px;
     }
 }
-@media (max-width: 649px) {
+@media (max-width: 697px) {
     .result-mobile {
         display: grid;
         place-items: center;
+    }
+    .timetable {
+        width: 387px;
     }
 }

@@ -22,7 +22,7 @@ div.result-content {
 }
 .results-list {
     display: grid;
-    grid-gap: 30px;
+    grid-gap: 40px;
     overflow: auto;
 }
 
