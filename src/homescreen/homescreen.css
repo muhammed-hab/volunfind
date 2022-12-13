@@ -104,3 +104,10 @@ input[type=checkbox]:checked + div {
         display: none;
     }
 }
+
+.error-msg {
+    color: red;
+    margin: 0;
+    font-weight: bold;
+    font-size: 20px;
+}

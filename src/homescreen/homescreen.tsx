@@ -66,10 +66,15 @@ export function Homescreen(props: {categories?: string[], availability?: Availab
 	const [availability, setAvailability] =
 		useState(props.availability || Availability.DefaultAvailability);
 	
+	const [noParamsError, setNoParamsError] = useState(false);
 	function redirectToResults() {
-		const categoriesMin = encodeURIComponent(Category.serialize(categories));
-		const availMin = encodeURIComponent(Availability.serialize(availability));
-		window.location.assign(`?categories=${categoriesMin}&availability=${availMin}&page=results`);
+		if (Object.values(availability).filter(day => day.checked).length === 0
+		        || categories.filter(cat => cat.checked).length === 0) setNoParamsError(true);
+		else {
+			const categoriesMin = encodeURIComponent(Category.serialize(categories));
+			const availMin = encodeURIComponent(Availability.serialize(availability));
+			window.location.assign(`?categories=${categoriesMin}&availability=${availMin}&page=results`);
+		}
 	}
 	
 	return (
@@ -83,6 +88,7 @@ export function Homescreen(props: {categories?: string[], availability?: Availab
 				</section>
 				<MobileFilters {...{categories, setCategories, availability, setAvailability}} />
 				<WebFilters {...{categories, setCategories, availability, setAvailability}} />
+				{noParamsError && (<p className="error-msg">Please Select Search Parameters</p>)}
 				<a href="#" className="search-btn" onClick={redirectToResults}>Search</a>
 			</div>
 		</div>
