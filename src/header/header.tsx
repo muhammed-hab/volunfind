@@ -6,7 +6,7 @@ export function Header() {
 	return (
 		<header>
 			<a href="/" className="header-box" style={{height: 36}}>
-				<img style={{height: '100%'}} src={Logo} alt="Volunfind" />
+				<img style={{height: '100%'}} src={Logo} alt="Nolateer" />
 				<p className="header-text" style={{marginLeft: 4}}>Nolateer</p>
 			</a>
 			<div />
