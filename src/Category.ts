@@ -4,12 +4,19 @@ export interface Category {
 	category: string, checked: boolean
 }
 export namespace Category {
+	let categories: string[] | undefined;
+	
 	export async function getAllCategories(): Promise<string[]> {
-		const db = await DBInterface.getDB();
-		const categories = DBInterface.convertRowsToObjects(
-			db.exec(`SELECT category FROM categories;`)[0]
-		);
-		return categories.map(({category}) => category);
+		if (categories !== undefined) return categories;
+		else {
+			const db = await DBInterface.getDB();
+			return (
+				categories = DBInterface.convertRowsToObjects(
+					db.exec(`SELECT category FROM categories;`)[0]
+				)
+                    .map(({category}) => category)
+			);
+		}
 	}
 	
 	export function serialize(category: Category[]): string {
