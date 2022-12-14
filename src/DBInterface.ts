@@ -16,6 +16,7 @@ export namespace DBInterface {
 	}
 	
 	export function convertRowsToObjects(rows: QueryExecResult): {[key: string]: any}[] {
-		return rows.values.map(row => Object.fromEntries(row.map((val, idx) => [rows.columns[idx], val])));
+		if (rows === undefined) return [];
+		else return rows.values.map(row => Object.fromEntries(row.map((val, idx) => [rows.columns[idx], val])));
 	}
 }

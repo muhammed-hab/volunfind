@@ -36,6 +36,8 @@ export namespace NonProfit {
 			);
   		`, [categories, availabilitySQLParams].flat())[0]);
 		
+		if (matches.length === 0) return [];
+		
 		const nonprofits = new Map<number, NonProfit>(
 			matches.map(row => [row.id, {
 				logoURL: row.logo_url,
