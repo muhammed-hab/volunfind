@@ -59,7 +59,7 @@ export function NonProfitResult(props: {nonprofit: NonProfit}) {
 						lineHeight: DESKTOP_NAME_SIZE * wideTitleScale + 'px'}}>{comp.name}</h3>
 					<h4 style={{fontSize: DESKTOP_CAT_SIZE * wideTitleScale,
 						lineHeight: DESKTOP_CAT_SIZE * wideTitleScale + 'px'}}>{comp.category}</h4>
-					<a href="#" className="btn btn-green">Volunteer</a>
+					<a href={comp.url} className="btn btn-green" target="_blank">Volunteer</a>
 				</div>
 				<TimeTable availability={comp.availability} />
 			</div>
@@ -89,7 +89,7 @@ export function NonProfitResult(props: {nonprofit: NonProfit}) {
 							lineHeight: DESKTOP_NAME_SIZE * narrowTitleScale + 'px'}}>{comp.name}</h3>
 						<h4 style={{fontSize: DESKTOP_CAT_SIZE * narrowTitleScale,
 							lineHeight: DESKTOP_CAT_SIZE * narrowTitleScale + 'px'}}>{comp.category}</h4>
-						<a href="#" className="btn btn-green">Volunteer</a>
+						<a href={comp.url} className="btn btn-green" target="_blank">Volunteer</a>
 					</div>
 					<TimeTable availability={comp.availability} />
 				</div>
@@ -109,7 +109,7 @@ export function NonProfitResult(props: {nonprofit: NonProfit}) {
 			<div className="volunteer-btns">
 				<a href="#" className="btn btn-dark-green" style={{marginRight: 'auto'}}
 				   onClick={() => setMobilePopupVisible(true)}>Details</a>
-				<a href="#" className="btn btn-green">Volunteer</a>
+				<a href={comp.url} className="btn btn-green" target="_blank">Volunteer</a>
 			</div>
 			<FilterPopup visible={mobilePopupVisible} setVisible={setMobilePopupVisible} title={comp.name}>
 				<div className="mobile-popup">
